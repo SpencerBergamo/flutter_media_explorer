@@ -29,4 +29,5 @@ flutter:
   uses-material-design: true
 
   assets:
+    - lib/assets/
     - test/assets/test_data.json
