@@ -1,6 +1,6 @@
-<img src="lib/assets/img_01.png" alt="image one" width="30%">
-<img src="lib/assets/img_02.png" alt="image two" width="30%">
-<img src="lib/assets/img_03.png" alt="image three" width="30%">
+<img src="lib/assets/img_01.png" alt="image one" width="20%">
+<img src="lib/assets/img_02.png" alt="image two" width="20%">
+<img src="lib/assets/img_03.png" alt="image three" width="20%">
 
 ![Watch Demo Video](lib/assets/intro_video.mp4)
 
