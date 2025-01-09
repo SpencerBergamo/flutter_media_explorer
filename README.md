@@ -1,3 +1,4 @@
+![Media Explorer Cover](lib/assets/media_explorer_cover.png)
 # Media Explorer App - Flutter
 🎉 Welcome to the **Media Explorer App** - a project designed to inspire and help you build your very own interactive media gallery in Flutter!
 
@@ -8,8 +9,6 @@ Whether you're building a portfolio app, a content-heavy social media app, or ju
 ## 📸 Screenshots 
 
 |<img src="lib/assets/img_01.png" alt="image one" width="30%">|<img src="lib/assets/img_02.png" alt="image one" width="30%">|<img src="lib/assets/img_03.png" alt="image one" width="30%">|
-
-## 
 
 ![Watch Demo Video](lib/assets/intro_video.mp4)
 
