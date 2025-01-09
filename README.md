@@ -5,6 +5,12 @@ The goal of this project is to turn **Media Explorer** into a plug-and-play pack
 
 Whether you're building a portfolio app, a content-heavy social media app, or just experimenting with media in Flutter, this project has everything you need to make your media shine. Ready to explore? Let's dive in! 🚀
 
+## 📸 Screenshots 
+
+|<img src="lib/assets/img_01.png" alt="image one" width="30%">|<img src="lib/assets/img_02.png" alt="image one" width="30%">|<img src="lib/assets/img_03.png" alt="image one" width="30%">|
+
+## 
+
 ![Watch Demo Video](lib/assets/intro_video.mp4)
 
 ## 📦 Packages and Versions
@@ -66,9 +72,3 @@ Great things are never built alone! You and I can build this together, and your 
     * `git commit -m "Add awesome feature!"`
     * `git push origin feature/awesome-feature`
   * Open a pull request - I'd love to see what you've built and how it makes **Media Explorer** better!
-  
-   
-
-<img src="lib/assets/img_01.png" alt="image one" width="40%">
-<img src="lib/assets/img_02.png" alt="image two" width="40%">
-<img src="lib/assets/img_03.png" alt="image three" width="40%">
