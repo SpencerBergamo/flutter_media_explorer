@@ -1,15 +1,11 @@
-<img src="lib/assets/img_01.png" alt="image one" width="20%">
-<img src="lib/assets/img_02.png" alt="image two" width="20%">
-<img src="lib/assets/img_03.png" alt="image three" width="20%">
-
-![Watch Demo Video](lib/assets/intro_video.mp4)
-
 # Media Explorer App - Flutter
 🎉 Welcome to the **Media Explorer App** - a project designed to inspire and help you build your very own interactive media gallery in Flutter!
 
 The goal of this project is to turn **Media Explorer** into a plug-and-play package, however, I am not there yet. Instead, I'm sharing this project to all Flutter developers in hopes to fine tune it's UI before it becomes an intallable package. **Media Explorer** is being built to create the smoothest, most delightful content experience in Flutter. With animations that bring your media to life - from fluid GridViews to immersive PageViews! 
 
 Whether you're building a portfolio app, a content-heavy social media app, or just experimenting with media in Flutter, this project has everything you need to make your media shine. Ready to explore? Let's dive in! 🚀
+
+![Watch Demo Video](lib/assets/intro_video.mp4)
 
 ## 📦 Packages and Versions
 * [http](https://pub.dev/packages/http) 1.2.2
@@ -72,3 +68,7 @@ Great things are never built alone! You and I can build this together, and your 
   * Open a pull request - I'd love to see what you've built and how it makes **Media Explorer** better!
   
    
+
+<img src="lib/assets/img_01.png" alt="image one" width="40%">
+<img src="lib/assets/img_02.png" alt="image two" width="40%">
+<img src="lib/assets/img_03.png" alt="image three" width="40%">
