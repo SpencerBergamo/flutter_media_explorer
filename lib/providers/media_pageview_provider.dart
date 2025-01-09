@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_media_explorer/models/media_model.dart';
 import 'package:overscroll_pop/overscroll_pop.dart';
 import 'package:video_player/video_player.dart';
