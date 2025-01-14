@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_media_explorer/models/media_model.dart';
+import 'package:flutter_media_explorer/utils/animate_transformation.dart';
 import 'package:video_player/video_player.dart';
 
 enum MediaState { thumbnail, loading, playVideo, error }
@@ -26,6 +27,8 @@ class MediaPageviewProvider extends ChangeNotifier {
         currentIndex = initialPage {
     transformationController.addListener(_onZoomChanged);
   }
+
+  Media get currentMedia => mediaList[currentIndex];
 
   bool isZoomed = false;
   bool showControls = true;
@@ -53,14 +56,34 @@ class MediaPageviewProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void doubleTapToZoom() {
+  void doubleTapToZoom(TapDownDetails details) {
     if (mediaList[currentIndex].type == MediaType.video) return;
 
-    isZoomed = !isZoomed;
     if (isZoomed) {
-      transformationController.value = Matrix4.identity();
+      final fullScale = Matrix4.identity();
+
+      animateTransformation(
+        transformationController: transformationController,
+        targetMatrix: fullScale,
+        vsync: vsync,
+      );
     } else {
-      transformationController.value = Matrix4.identity();
+      final dx = details.localPosition.dx;
+      final dy = details.localPosition.dy;
+
+      const double scale = 5.0;
+      final translateX = -dx * (scale - 1);
+      final translateY = -dy * (scale - 1);
+
+      final targetMatrix = Matrix4.identity()
+        ..translate(translateX, translateY)
+        ..scale(scale);
+
+      animateTransformation(
+        transformationController: transformationController,
+        targetMatrix: targetMatrix,
+        vsync: vsync,
+      );
     }
 
     notifyListeners();

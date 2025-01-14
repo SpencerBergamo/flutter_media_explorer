@@ -21,7 +21,7 @@ class PageviewPage extends StatefulWidget {
 }
 
 class _PageviewPageState extends State<PageviewPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -102,7 +102,7 @@ class _PageviewPageState extends State<PageviewPage>
             ),
             body: GestureDetector(
               onTap: provider.toggleControls,
-              onDoubleTap: provider.doubleTapToZoom,
+              onDoubleTapDown: (details) => provider.doubleTapToZoom(details),
               child: PageView.builder(
                 controller: provider.pageController,
                 itemCount: provider.mediaList.length,
