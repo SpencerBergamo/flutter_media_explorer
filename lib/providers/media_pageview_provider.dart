@@ -1,26 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_media_explorer/models/media_model.dart';
-import 'package:overscroll_pop/overscroll_pop.dart';
 import 'package:video_player/video_player.dart';
+
+enum MediaState { thumbnail, loading, playVideo, error }
 
 class MediaPageviewProvider extends ChangeNotifier {
   final List<Media> mediaList;
   final PageController pageController;
   final AnimationController animationController; // for AppBar & Video Controls
   final TransformationController transformationController; // for Zoom Controls
-  final DragToPopDirection dragToPopDirection; // Direction to Pop Page
   final TickerProvider vsync;
-
-  bool isZoomed = false;
-  bool showControls = true;
-  int currentIndex;
-
-  VideoPlayerController? videoController;
-  ValueNotifier<bool> loadingVideo = ValueNotifier(false);
 
   MediaPageviewProvider({
     required this.mediaList,
-    required this.dragToPopDirection,
     required int initialPage,
     required this.vsync,
   })  : pageController = PageController(initialPage: initialPage),
@@ -33,14 +27,27 @@ class MediaPageviewProvider extends ChangeNotifier {
     transformationController.addListener(_onZoomChanged);
   }
 
+  bool isZoomed = false;
+  bool showControls = true;
+  int currentIndex;
+
+  ValueNotifier<MediaState> stateOfMedia = ValueNotifier(MediaState.thumbnail);
+  VideoPlayerController? videoController;
+
   void toggleControls() {
     showControls = !showControls;
+
+    if (showControls) {
+      animationController.forward();
+    } else {
+      animationController.reverse();
+    }
+
     notifyListeners();
   }
 
   void pageChanged(int page) {
     videoController?.dispose();
-    videoController = null;
     currentIndex = page;
 
     notifyListeners();
@@ -66,29 +73,28 @@ class MediaPageviewProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initVideoPlayerController(String url) async {
+  Future<void> initVideoPlayerController(String url) async {
     if (videoController != null) return;
 
-    loadingVideo.value = true;
+    stateOfMedia.value = MediaState.loading;
     notifyListeners();
 
     final controller = VideoPlayerController.networkUrl(Uri.parse(url));
-    await controller.initialize();
-    videoController = controller;
-    loadingVideo.value = false;
-
-    notifyListeners();
+    await controller.initialize().whenComplete(() {
+      controller.play();
+      videoController = controller;
+      stateOfMedia.value = MediaState.playVideo;
+      Timer(const Duration(seconds: 2), () {
+        showControls = false;
+        animationController.reverse();
+        notifyListeners();
+      });
+      notifyListeners();
+    }).catchError((e) {
+      stateOfMedia.value = MediaState.error;
+      notifyListeners();
+    });
   }
-
-  // Future<VideoPlayerController> getVideoController(String url) async {
-  //   if (videoController != null) return videoController!;
-
-  //   final controller = VideoPlayerController.networkUrl(Uri.parse(url));
-  //   await controller.initialize();
-  //   videoController = controller;
-
-  //   return controller;
-  // }
 
   void playPauseVideo() {
     if (videoController == null) return;
@@ -97,6 +103,7 @@ class MediaPageviewProvider extends ChangeNotifier {
       videoController!.pause();
     } else {
       videoController!.play();
+      toggleControls();
     }
 
     notifyListeners();

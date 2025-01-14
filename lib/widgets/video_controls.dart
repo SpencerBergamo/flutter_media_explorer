@@ -11,12 +11,14 @@ class VideoControls extends StatefulWidget {
     super.key,
     required this.videoPlayerController,
     required this.animationController,
-    required this.isVisible,
+    // required this.provider,
+    // required this.isVisible,
   });
 
+  // final MediaPageviewProvider provider;
   final VideoPlayerController videoPlayerController;
   final AnimationController animationController;
-  final bool isVisible;
+  // final bool isVisible;
 
   @override
   State<VideoControls> createState() => _VideoControlsState();
@@ -26,28 +28,21 @@ class _VideoControlsState extends State<VideoControls> {
   VideoPlayerController get controller => widget.videoPlayerController;
   VideoPlayerValue get video => controller.value;
   AnimationController get animationController => widget.animationController;
-  bool get isVisible => widget.isVisible;
-
-  double? seekValue;
-
-  Duration get bufferedPosition =>
-      video.buffered.isEmpty ? Duration.zero : video.buffered.last.end;
-
-  bool get isMuted => video.volume == 0;
-
-  String get timestamp {
-    final Duration currentPosition =
-        seekValue == null ? video.position : doubleToDuration(seekValue!);
-
-    return "${currentPosition.timestamp} / ${video.duration.timestamp}";
-  }
-
-  double durationToDouble(Duration duration) => duration.inSeconds.toDouble();
-
-  Duration doubleToDuration(double position) =>
-      Duration(minutes: position ~/ 60, seconds: (position % 60).truncate());
 
   void listener() => setState(() {});
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    final seconds = duration.inSeconds.remainder(60);
+
+    if (hours > 0) {
+      return '$hours:${twoDigits(minutes)}:${twoDigits(seconds)}';
+    }
+
+    return '$minutes:${twoDigits(seconds)}';
+  }
 
   @override
   void initState() {
@@ -58,63 +53,37 @@ class _VideoControlsState extends State<VideoControls> {
   @override
   Widget build(BuildContext context) {
     // isVisible ? animationController.reverse() : animationController.forward();
+    final Duration currentPosition = controller.value.position;
+    final Duration totalDuration = controller.value.duration;
 
     return FadeTransition(
       opacity: Tween<double>(begin: 1.0, end: 0.0).animate(CurvedAnimation(
         parent: animationController,
         curve: Curves.fastOutSlowIn,
       )),
-      child: IconTheme(
-        data: const IconThemeData(color: Colors.white),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              children: [
-                SliderTheme(
-                  data: SliderThemeData(
-                    thumbShape: SliderComponentShape.noThumb,
-                  ),
-                  child: Slider(
-                    max: durationToDouble(video.duration),
-                    value: durationToDouble(video.position),
-                    onChanged: null,
-                  ),
-                ),
-                Slider(
-                  max: durationToDouble(video.duration),
-                  value: seekValue ?? durationToDouble(video.position),
-                  onChanged: (value) => setState(() => seekValue = value),
-                  onChangeEnd: (value) {
-                    setState(() => seekValue = null);
-                    controller.seekTo(doubleToDuration(value));
+      child: DefaultTextStyle(
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(formatDuration(currentPosition)),
+              Expanded(
+                child: Slider(
+                  value: currentPosition.inSeconds.toDouble(),
+                  min: 0.0,
+                  max: totalDuration.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    controller.seekTo(Duration(seconds: value.toInt()));
                   },
+                  // activeColor: Colors.white,
+                  inactiveColor: Colors.white.withOpacity(0.5),
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: Icon(video.isPlaying ? Icons.pause : Icons.play_arrow),
-                  onPressed: () {
-                    if (video.isPlaying) {
-                      controller.pause();
-                    } else {
-                      controller.play();
-                    }
-                  },
-                ),
-                IconButton(
-                  icon: Icon(isMuted ? Icons.volume_off : Icons.volume_up),
-                  onPressed: () {
-                    controller.setVolume(isMuted ? 1.0 : 0.0);
-                  },
-                ),
-                Text(timestamp, style: const TextStyle(color: Colors.white)),
-              ],
-            ),
-          ],
+              ),
+              Text(formatDuration(totalDuration)),
+            ],
+          ),
         ),
       ),
     );

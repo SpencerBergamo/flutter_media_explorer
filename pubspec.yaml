@@ -13,9 +13,11 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
+  cached_network_image: ^3.4.1
   http: ^1.2.2
   overscroll_pop: ^0.1.1
   provider: ^6.1.2
+  shimmer: ^3.0.0
   video_player: ^2.9.1
 
 dev_dependencies:

@@ -20,8 +20,12 @@ class HomePage extends StatelessWidget {
           final List<Media> media = provider.media;
 
           if (media.isEmpty) {
-            return const Center(
-              child: Text("No media available."),
+            return const SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: Center(
+                child: Text("Select Media to get started!"),
+              ),
             );
           }
 

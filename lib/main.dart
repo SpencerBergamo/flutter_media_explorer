@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   // Initiate Test Data for App
   final String data = await rootBundle.loadString("test/assets/test_data.json");
   final List<dynamic> jsonData = json.decode(data);
